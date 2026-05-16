@@ -1,0 +1,10 @@
+name: BetterShops
+prefix: BetterShops
+version: '${version}'
+
+main: ru.deelter.betterShops.BetterShops
+api-version: '26.1.2'
+load: POSTWORLD
+
+authors: [ DeelTer ]
+website: https://deelter.ru

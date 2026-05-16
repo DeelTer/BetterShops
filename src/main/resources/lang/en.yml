@@ -1,0 +1,5 @@
+messages:
+  shop.cost: "<color:#FFD700>Cost</color>"
+  shop.can-buy: "<color:#C7B9A6>You can buy this</color>"
+  shop.cannot-buy: "<color:#C7B9A6>You cannot afford this</color>"
+  shop.purchased: "<color:#FFD700>Purchase successful!</color>"
