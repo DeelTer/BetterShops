@@ -1,11 +1,12 @@
-package ru.deelter.bettershops.shop;
+package ru.deelter.bettershops.shop.cost;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import ru.deelter.bettershops.shop.product.ProductDeserializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CostDeserializer {
@@ -22,17 +23,12 @@ public class CostDeserializer {
             case "item" -> {
                 int amount = obj.get("amount").getAsInt();
                 JsonObject itemObj = obj.getAsJsonObject("item");
-                ItemStack item = ItemStack.deserialize(
-                        new com.google.gson.internal.LinkedTreeMap<>() {{
-                            put("type", itemObj.get("id").getAsString());
-                            put("amount", itemObj.get("count").getAsInt());
-                        }}
-                );
+                ItemStack item = ProductDeserializer.deserializeItem(itemObj);
                 yield new ItemCost(item, amount);
             }
             case "multi", "optional" -> {
                 JsonArray arr = obj.getAsJsonArray("costs");
-                List<ICost> costs = new java.util.ArrayList<>();
+                List<ICost> costs = new ArrayList<>();
                 for (JsonElement e : arr) {
                     costs.add(read(e));
                 }

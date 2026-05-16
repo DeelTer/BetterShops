@@ -1,17 +1,12 @@
-package ru.deelter.bettershops.shop;
+package ru.deelter.bettershops.shop.cost;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
+import ru.deelter.bettershops.BetterShops;
 import ru.deelter.bettershops.utils.EconomyHook;
 
-@Getter
-@AllArgsConstructor
-public class SingleCost implements ICost {
-    private final String currency; // "coins", "crystals"
-    private final double amount;
-
+public record SingleCost(String currency, double amount) implements ICost {
     @Override
     public boolean has(Player player) {
         return EconomyHook.getBalance(player, currency) >= amount;
@@ -23,8 +18,10 @@ public class SingleCost implements ICost {
     }
 
     @Override
-    public Component getDescription() {
-        return Component.translatable("shop.cost")
+    public @NonNull Component getDescription() {
+        Component costMsg = BetterShops.getInstance().getLang().getMessage("shop-cost", null);
+        if (costMsg == null) costMsg = Component.text("Cost");
+        return costMsg
                 .append(Component.text(": "))
                 .append(EconomyHook.format(amount, currency));
     }

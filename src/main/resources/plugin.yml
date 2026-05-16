@@ -1,10 +1,16 @@
 name: BetterShops
-prefix: BetterShops
+description: $description
 version: '${version}'
+main: ru.deelter.bettershops.BetterShops
 
-main: ru.deelter.betterShops.BetterShops
-api-version: '26.1.2'
+api-version: '1.21'
 load: POSTWORLD
-
-authors: [ DeelTer ]
+author: DeelTer
 website: https://deelter.ru
+
+depend: [ MultiEconomy, NBTAPI ]
+
+commands:
+  shop:
+    aliases: [shops, market]
+    usage: /shop <open|reload>

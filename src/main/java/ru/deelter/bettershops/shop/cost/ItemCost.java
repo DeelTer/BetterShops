@@ -1,20 +1,14 @@
-package ru.deelter.bettershops.shop;
+package ru.deelter.bettershops.shop.cost;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jspecify.annotations.NonNull;
+import ru.deelter.bettershops.BetterShops;
 
-@Getter
-@AllArgsConstructor
-public class ItemCost implements ICost {
-    private final ItemStack item;
-    private final int amount;
-
+public record ItemCost(ItemStack item, int amount) implements ICost {
     @Override
-    public boolean has(Player player) {
+    public boolean has(@NonNull Player player) {
         int total = 0;
         for (ItemStack content : player.getInventory().getContents()) {
             if (content != null && item.isSimilar(content)) {
@@ -26,7 +20,7 @@ public class ItemCost implements ICost {
     }
 
     @Override
-    public void apply(Player player) {
+    public void apply(@NonNull Player player) {
         int toRemove = amount;
         for (ItemStack content : player.getInventory().getContents()) {
             if (content == null || !item.isSimilar(content)) continue;
@@ -45,15 +39,17 @@ public class ItemCost implements ICost {
     }
 
     @Override
-    public Component getDescription() {
-        return Component.translatable("shop.cost")
+    public @NonNull Component getDescription() {
+        Component costMsg = BetterShops.getInstance().getLang().getMessage("shop-cost", null);
+        if (costMsg == null) costMsg = Component.text("Cost");
+        return costMsg
                 .append(Component.text(": "))
                 .append(item.displayName())
                 .append(Component.text(" x" + amount));
     }
 
     @Override
-    public Component getPrice() {
+    public @NonNull Component getPrice() {
         return item.displayName().append(Component.text(" x" + amount));
     }
 }

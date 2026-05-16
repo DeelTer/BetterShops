@@ -1,0 +1,4 @@
+messages:
+  shop-cost: "<color:#FFD700>Цена</color>"
+  shop-purchased: "<color:#FFD700>Покупка успешна!</color>"
+  shop-cannot-afford: "<color:#C7B9A6>Вам не хватает средств</color>"

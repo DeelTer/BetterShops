@@ -1,0 +1,22 @@
+# BetterShops Configuration
+# MiniMessage color codes: <color:#FFD700> for gold, <#C7B9A6> for secondary
+
+language:
+  default: "en"
+  auto-detect: true
+
+gui:
+  # Size of the shop inventory (must be multiple of 9, 6 rows = 54)
+  rows: 6
+  # Item that acts as a next page button
+  next-page-item:
+    material: "ARROW"
+    name: "<color:#FFD700>Next Page"
+  # Item that acts as a previous page button
+  prev-page-item:
+    material: "ARROW"
+    name: "<color:#FFD700>Previous Page"
+  # Item that fills empty slots (optional)
+  filler-item:
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: " "

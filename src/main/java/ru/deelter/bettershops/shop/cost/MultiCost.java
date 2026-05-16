@@ -1,9 +1,11 @@
-package ru.deelter.bettershops.shop;
+package ru.deelter.bettershops.shop.cost;
 
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.entity.Player;
+import ru.deelter.bettershops.BetterShops;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +17,9 @@ public class MultiCost implements ICost {
 
     public MultiCost(List<ICost> costs) {
         this.costs = costs;
-        this.description = Component.translatable("shop.cost")
+        Component costMsg = BetterShops.getInstance().getLang().getMessage("shop-cost", null);
+        if (costMsg == null) costMsg = Component.text("Cost");
+        this.description = costMsg
                 .append(Component.text(": "))
                 .append(Component.join(JoinConfiguration.separator(Component.text(" & ")),
                         costs.stream().map(ICost::getPrice).collect(Collectors.toList())));
@@ -33,7 +37,12 @@ public class MultiCost implements ICost {
     }
 
     @Override
-    public Component getDescription() { return description; }
+    public Component getDescription() {
+        return description;
+    }
+
     @Override
-    public Component getPrice() { return price; }
+    public Component getPrice() {
+        return price;
+    }
 }
