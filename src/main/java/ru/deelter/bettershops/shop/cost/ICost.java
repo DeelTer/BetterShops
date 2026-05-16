@@ -8,7 +8,7 @@ public interface ICost {
 
 	void apply(Player player);
 
-	Component getDescription();     // полное описание для лора
+	Component getDescription(Player viewer);
 
-	Component getPrice();           // короткая строка для отображения в иконке
+	Component getPrice();
 }

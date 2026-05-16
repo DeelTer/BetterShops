@@ -3,12 +3,12 @@ package ru.deelter.bettershops.shop.cost;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NonNull;
 import ru.deelter.bettershops.BetterShops;
 
 public record ItemCost(ItemStack item, int amount) implements ICost {
+
     @Override
-    public boolean has(@NonNull Player player) {
+    public boolean has(Player player) {
         int total = 0;
         for (ItemStack content : player.getInventory().getContents()) {
             if (content != null && item.isSimilar(content)) {
@@ -20,16 +20,14 @@ public record ItemCost(ItemStack item, int amount) implements ICost {
     }
 
     @Override
-    public void apply(@NonNull Player player) {
+    public void apply(Player player) {
         int toRemove = amount;
         for (ItemStack content : player.getInventory().getContents()) {
             if (content == null || !item.isSimilar(content)) continue;
             int amt = content.getAmount();
             if (amt >= toRemove) {
                 content.setAmount(amt - toRemove);
-                if (content.getAmount() <= 0) {
-                    player.getInventory().remove(content);
-                }
+                if (content.getAmount() <= 0) player.getInventory().remove(content);
                 break;
             } else {
                 toRemove -= amt;
@@ -39,17 +37,16 @@ public record ItemCost(ItemStack item, int amount) implements ICost {
     }
 
     @Override
-    public @NonNull Component getDescription() {
-        Component costMsg = BetterShops.getInstance().getLang().getMessage("shop-cost", null);
-        if (costMsg == null) costMsg = Component.text("Cost");
-        return costMsg
+    public Component getDescription(Player viewer) {
+        Component costWord = BetterShops.getInstance().getLang().getMessage("shop-cost", viewer);
+        if (costWord == null) costWord = Component.text("Cost");
+        return costWord
                 .append(Component.text(": "))
-                .append(item.displayName())
-                .append(Component.text(" x" + amount));
+                .append(getPrice());
     }
 
     @Override
-    public @NonNull Component getPrice() {
+    public Component getPrice() {
         return item.displayName().append(Component.text(" x" + amount));
     }
 }

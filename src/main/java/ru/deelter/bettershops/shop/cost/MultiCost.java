@@ -12,18 +12,12 @@ import java.util.stream.Collectors;
 @Getter
 public class MultiCost implements ICost {
     private final List<ICost> costs;
-    private final Component description;
-    private final Component price;
+    private final Component price; // краткая строка (без "Cost:")
 
     public MultiCost(List<ICost> costs) {
         this.costs = costs;
-        Component costMsg = BetterShops.getInstance().getLang().getMessage("shop-cost", null);
-        if (costMsg == null) costMsg = Component.text("Cost");
-        this.description = costMsg
-                .append(Component.text(": "))
-                .append(Component.join(JoinConfiguration.separator(Component.text(" & ")),
-                        costs.stream().map(ICost::getPrice).collect(Collectors.toList())));
-        this.price = description;
+        this.price = Component.join(JoinConfiguration.separator(Component.text(" & ")),
+                costs.stream().map(ICost::getPrice).collect(Collectors.toList()));
     }
 
     @Override
@@ -37,8 +31,12 @@ public class MultiCost implements ICost {
     }
 
     @Override
-    public Component getDescription() {
-        return description;
+    public Component getDescription(Player viewer) {
+        Component costWord = BetterShops.getInstance().getLang().getMessage("shop-cost", viewer);
+        if (costWord == null) costWord = Component.text("Cost");
+        return costWord
+                .append(Component.text(": "))
+                .append(price);
     }
 
     @Override

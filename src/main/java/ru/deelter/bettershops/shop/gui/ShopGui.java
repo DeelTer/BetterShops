@@ -1,5 +1,6 @@
 package ru.deelter.bettershops.shop.gui;
 
+import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -38,11 +39,10 @@ public class ShopGui {
 			ItemMeta meta = icon.getItemMeta();
 			List<Component> lore = meta.lore() == null ? new ArrayList<>() : meta.lore();
 			lore.add(Component.empty());
-			// Используем getDescription() — он сам содержит слово «Cost» или «Цена»
-			Component costLine = product.cost().getDescription()
+			// Используем getDescription, который сам добавляет локализованное "Цена: "
+			Component costLine = product.cost().getDescription(player)
 					.decoration(TextDecoration.ITALIC, false);
 			lore.add(costLine);
-
 			meta.lore(lore);
 			icon.setItemMeta(meta);
 			inv.setItem(slot++, icon);
@@ -50,33 +50,30 @@ public class ShopGui {
 
 		int rows = inv.getSize() / 9;
 		int lastRow = (rows - 1) * 9;
-		if (holder.getPage() > 0) {
-			inv.setItem(lastRow, Config.get().getPrevPageItem());
-		}
-		if (holder.getPage() < holder.getMaxPage()) {
-			inv.setItem(lastRow + 8, Config.get().getNextPageItem());
-		}
+		if (holder.getPage() > 0) inv.setItem(lastRow, Config.get().getPrevPageItem());
+		if (holder.getPage() < holder.getMaxPage()) inv.setItem(lastRow + 8, Config.get().getNextPageItem());
+
 		ItemStack filler = Config.get().getFillerItem();
 		for (int i = 0; i < inv.getSize(); i++) {
 			if (inv.getItem(i) == null) inv.setItem(i, filler);
 		}
 	}
 
-	public static void nextPage(Player player, ShopGuiHolder holder) {
+	public static void nextPage(Player player, @NonNull ShopGuiHolder holder) {
 		if (holder.getPage() < holder.getMaxPage()) {
 			holder.setPage(holder.getPage() + 1);
 			updateInventory(player.getOpenInventory().getTopInventory(), holder, player);
 		}
 	}
 
-	public static void prevPage(Player player, ShopGuiHolder holder) {
+	public static void prevPage(Player player, @NonNull ShopGuiHolder holder) {
 		if (holder.getPage() > 0) {
 			holder.setPage(holder.getPage() - 1);
 			updateInventory(player.getOpenInventory().getTopInventory(), holder, player);
 		}
 	}
 
-	public static void buy(Player player, ShopGuiHolder holder, int slot) {
+	public static void buy(Player player, @NonNull ShopGuiHolder holder, int slot) {
 		int start = holder.getPage() * 45;
 		int index = start + slot;
 		var products = holder.getShop().products();

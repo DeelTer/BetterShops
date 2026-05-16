@@ -7,6 +7,7 @@ import ru.deelter.bettershops.BetterShops;
 import ru.deelter.bettershops.utils.EconomyHook;
 
 public record SingleCost(String currency, double amount) implements ICost {
+
     @Override
     public boolean has(Player player) {
         return EconomyHook.getBalance(player, currency) >= amount;
@@ -18,16 +19,16 @@ public record SingleCost(String currency, double amount) implements ICost {
     }
 
     @Override
-    public @NonNull Component getDescription() {
-        Component costMsg = BetterShops.getInstance().getLang().getMessage("shop-cost", null);
-        if (costMsg == null) costMsg = Component.text("Cost");
-        return costMsg
+    public @NonNull Component getDescription(Player viewer) {
+        Component costWord = BetterShops.getInstance().getLang().getMessage("shop-cost", viewer);
+        if (costWord == null) costWord = Component.text("Cost");
+        return costWord
                 .append(Component.text(": "))
-                .append(EconomyHook.format(amount, currency));
+                .append(getPrice());
     }
 
     @Override
-    public Component getPrice() {
+    public @NonNull Component getPrice() {
         return EconomyHook.format(amount, currency);
     }
 }
