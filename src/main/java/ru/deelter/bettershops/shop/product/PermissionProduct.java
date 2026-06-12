@@ -9,6 +9,11 @@ import java.util.List;
 
 public record PermissionProduct(ICost cost, ItemStack icon, List<String> permissions) implements IProduct {
 	@Override
+	public boolean canBuy(Player player) {
+		return permissions.stream().anyMatch(perm -> !player.hasPermission(perm));
+	}
+
+	@Override
 	public void apply(Player player) {
 		for (String perm : permissions) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(),

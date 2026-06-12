@@ -79,6 +79,11 @@ public class ShopGui {
 		var products = holder.getShop().products();
 		if (index >= 0 && index < products.size()) {
 			IProduct product = products.get(index);
+			if (!product.canBuy(player)) {
+				Component msg = BetterShops.getInstance().getLang().getMessage("shop-already-owned", player);
+				if (msg != null) player.sendMessage(msg);
+				return;
+			}
 			if (product.cost().has(player)) {
 				product.cost().apply(player);
 				product.apply(player);

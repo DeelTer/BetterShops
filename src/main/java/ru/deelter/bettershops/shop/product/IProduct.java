@@ -10,4 +10,8 @@ public interface IProduct {
 	ItemStack icon();
 
 	void apply(Player player);
+
+	default boolean canBuy(Player player) {
+		return true;
+	}
 }
