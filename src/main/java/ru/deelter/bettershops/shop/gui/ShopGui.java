@@ -4,6 +4,7 @@ import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -63,6 +64,7 @@ public class ShopGui {
 		if (holder.getPage() < holder.getMaxPage()) {
 			holder.setPage(holder.getPage() + 1);
 			updateInventory(player.getOpenInventory().getTopInventory(), holder, player);
+			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
 		}
 	}
 
@@ -70,6 +72,7 @@ public class ShopGui {
 		if (holder.getPage() > 0) {
 			holder.setPage(holder.getPage() - 1);
 			updateInventory(player.getOpenInventory().getTopInventory(), holder, player);
+			player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
 		}
 	}
 
@@ -80,8 +83,10 @@ public class ShopGui {
 		if (index >= 0 && index < products.size()) {
 			IProduct product = products.get(index);
 			if (!product.canBuy(player)) {
-				Component msg = BetterShops.getInstance().getLang().getMessage("shop-already-owned", player);
-				if (msg != null) player.sendMessage(msg);
+				Component message = BetterShops.getInstance().getLang().getMessage("shop-already-owned", player);
+				if (message != null) player.sendMessage(message);
+
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
 				return;
 			}
 			if (product.cost().has(player)) {
@@ -90,9 +95,13 @@ public class ShopGui {
 				Component msg = BetterShops.getInstance().getLang().getMessage("shop-purchased", player);
 				if (msg != null) player.sendMessage(msg);
 				updateInventory(player.getOpenInventory().getTopInventory(), holder, player);
+
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1f, 1f);
 			} else {
 				Component msg = BetterShops.getInstance().getLang().getMessage("shop-cannot-afford", player);
 				if (msg != null) player.sendMessage(msg);
+
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
 			}
 		}
 	}
