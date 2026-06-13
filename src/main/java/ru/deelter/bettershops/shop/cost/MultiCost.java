@@ -1,6 +1,7 @@
 package ru.deelter.bettershops.shop.cost;
 
 import lombok.Getter;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ public class MultiCost implements ICost {
     public MultiCost(List<ICost> costs) {
         this.costs = costs;
         this.price = Component.join(JoinConfiguration.separator(Component.text(" & ")),
-                costs.stream().map(ICost::getPrice).collect(Collectors.toList()));
+                costs.stream().map(iCost -> iCost.getPrice(Audience.empty())).collect(Collectors.toList()));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class MultiCost implements ICost {
     }
 
     @Override
-    public Component getPrice() {
+    public Component getPrice(Audience viewer) {
         return price;
     }
 }

@@ -1,5 +1,6 @@
 package ru.deelter.bettershops.shop.cost;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
@@ -24,11 +25,11 @@ public record SingleCost(String currency, double amount) implements ICost {
         if (costWord == null) costWord = Component.text("Cost");
         return costWord
                 .append(Component.text(": "))
-                .append(getPrice());
+                .append(getPrice(viewer));
     }
 
     @Override
-    public @NonNull Component getPrice() {
-        return EconomyHook.format(amount, currency);
+    public @NonNull Component getPrice(Audience viewer) {
+        return EconomyHook.format(amount, currency, viewer);
     }
 }

@@ -1,5 +1,6 @@
 package ru.deelter.bettershops.utils;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
@@ -30,11 +31,11 @@ public final class EconomyHook {
 		getEconomy().getEconomyManager().addBalance(player.getUniqueId(), currencyId, amount);
 	}
 
-	public static @NonNull Component format(double amount, String currencyId) {
+	public static @NonNull Component format(double amount, String currencyId, Audience viewer) {
 		Currency currency = getEconomy().getEconomyManager().getCurrencies().get(currencyId);
 		if (currency == null) {
 			return Component.text(amount + " " + currencyId).decoration(TextDecoration.ITALIC, false);
 		}
-		return EconomyUtils.getVisual(amount, currency).decoration(TextDecoration.ITALIC, false);
+		return EconomyUtils.getVisual(amount, currency, viewer).decoration(TextDecoration.ITALIC, false);
 	}
 }

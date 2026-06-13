@@ -1,5 +1,6 @@
 package ru.deelter.bettershops.shop.cost;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -10,5 +11,5 @@ public interface ICost {
 
 	Component getDescription(Player viewer);
 
-	Component getPrice();
+	Component getPrice(Audience viewer);
 }

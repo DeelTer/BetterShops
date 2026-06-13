@@ -1,5 +1,6 @@
 package ru.deelter.bettershops.shop.cost;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,11 +43,11 @@ public record ItemCost(ItemStack item, int amount) implements ICost {
         if (costWord == null) costWord = Component.text("Cost");
         return costWord
                 .append(Component.text(": "))
-                .append(getPrice());
+                .append(getPrice(viewer));
     }
 
     @Override
-    public Component getPrice() {
+    public Component getPrice(Audience viewer) {
         return item.displayName().append(Component.text(" x" + amount));
     }
 }
