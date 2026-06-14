@@ -38,7 +38,7 @@ public class Lang {
         File langFolder = new File(plugin.getDataFolder(), "lang");
         if (!langFolder.exists()) langFolder.mkdirs();
 
-        String[] defaults = {"en.yml", "ru.yml"};
+        String[] defaults = {"en.yml", "ru.yml", "uk.yml"};
         for (String name : defaults) {
             File target = new File(langFolder, name);
             if (!target.exists()) plugin.saveResource("lang/" + name, false);
