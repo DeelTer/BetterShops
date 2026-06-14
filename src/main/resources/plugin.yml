@@ -9,6 +9,8 @@ author: DeelTer
 website: https://deelter.ru
 
 depend: [ MultiEconomy, NBTAPI ]
+softdepend:
+  - MiniPlaceholders
 
 commands:
   shop:

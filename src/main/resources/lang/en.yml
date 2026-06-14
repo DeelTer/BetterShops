@@ -1,5 +1,5 @@
 messages:
-  shop-cost: "<color:#FFD700>Cost</color>"
-  shop-purchased: "<color:#FFD700>Purchase successful!</color>"
-  shop-cannot-afford: "<color:#C7B9A6>You cannot afford this</color>"
-  shop-already-owned: "<color:#F05E5E>You already own this!</color>"
+  shop-cost: "<color:#FFD700>Cost: <cost>"
+  shop-purchased: "<color:#FFD700>Purchase successful!"
+  shop-cannot-afford: "<color:#C7B9A6>You cannot afford this"
+  shop-already-owned: "<color:#F05E5E>You already own this!"

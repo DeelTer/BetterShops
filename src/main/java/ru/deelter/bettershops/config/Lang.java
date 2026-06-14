@@ -1,6 +1,8 @@
 package ru.deelter.bettershops.config;
 
+import io.github.miniplaceholders.api.MiniPlaceholders;
 import lombok.Getter;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -24,9 +26,11 @@ public class Lang {
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private String defaultLanguage;
     private boolean autoDetect;
+    private final boolean miniPlaceholders;
 
     public Lang(BetterShops plugin) {
         this.plugin = plugin;
+        this.miniPlaceholders = isMiniPlaceholdersAvailable();
         reload();
     }
 
@@ -62,19 +66,19 @@ public class Lang {
     }
 
     @Nullable
-    public Component getMessage(String key, @Nullable CommandSender sender, String... placeholders) {
+    public Component getMessage(String key, @Nullable CommandSender sender, TagResolver... resolvers) {
         Player player = (sender instanceof Player p) ? p : null;
         String raw = resolveRaw(key, player);
         if (raw == null || raw.isEmpty()) return null;
 
-        if (placeholders.length % 2 != 0) {
-            throw new IllegalArgumentException("Placeholders must be key-value pairs");
-        }
-        TagResolver[] resolvers = new TagResolver[placeholders.length / 2];
-        for (int i = 0; i < placeholders.length; i += 2) {
-            resolvers[i / 2] = Placeholder.unparsed(placeholders[i], placeholders[i + 1]);
-        }
-        return miniMessage.deserialize(raw, resolvers);
+        return parseMessage(raw, sender, resolvers);
+    }
+
+    public Component parseMessage(String raw, @Nullable Audience viewer, TagResolver... resolvers) {
+        TagResolver combined = TagResolver.resolver(TagResolver.resolver(resolvers));
+        if (this.miniPlaceholders)
+            combined = TagResolver.resolver(combined, MiniPlaceholders.audienceGlobalPlaceholders());
+        return miniMessage.deserialize(raw, viewer == null ? Audience.empty() : viewer, combined);
     }
 
     private String resolveRaw(String key, Player player) {
@@ -98,5 +102,14 @@ public class Lang {
         String shortLang = locale.getLanguage().toLowerCase();
         if (messages.containsKey(shortLang)) return shortLang;
         return defaultLanguage;
+    }
+
+    private boolean isMiniPlaceholdersAvailable() {
+        try {
+            Class.forName("io.github.miniplaceholders.api.MiniPlaceholders");
+            return true;
+        } catch (ClassNotFoundException _) {
+            return false;
+        }
     }
 }

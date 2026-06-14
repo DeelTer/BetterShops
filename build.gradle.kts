@@ -22,6 +22,7 @@ dependencies {
 
     compileOnly("com.google.code.gson:gson:2.10.1")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.7")
+    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
     compileOnly(files("libs/MultiEconomy-1.0.jar"))
 }
 
