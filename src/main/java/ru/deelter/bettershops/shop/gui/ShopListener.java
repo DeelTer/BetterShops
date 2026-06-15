@@ -24,7 +24,7 @@ public class ShopListener implements Listener {
 			ShopGui.nextPage(player, holder);
 		} else if (slot >= 0 && slot < inv.getSize() && slot / 9 < inv.getSize() / 9 - 1) {
 			// product slot
-			ShopGui.buy(player, holder, slot);
+			ShopGui.buy(player, holder, slot, event.isRightClick());
 		}
 	}
 

@@ -12,6 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import ru.deelter.bettershops.BetterShops;
 import ru.deelter.bettershops.config.Config;
 import ru.deelter.bettershops.shop.Shop;
+import ru.deelter.bettershops.shop.cost.ICost;
+import ru.deelter.bettershops.shop.cost.OptionalCost;
 import ru.deelter.bettershops.shop.product.IProduct;
 
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class ShopGui {
 		}
 	}
 
-	public static void buy(Player player, @NonNull ShopGuiHolder holder, int slot) {
+	public static void buy(Player player, @NonNull ShopGuiHolder holder, int slot, boolean rightClick) {
 		int start = holder.getPage() * 45;
 		int index = start + slot;
 		var products = holder.getShop().products();
@@ -89,8 +91,17 @@ public class ShopGui {
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
 				return;
 			}
-			if (product.cost().has(player)) {
-				product.cost().apply(player);
+			ICost cost = product.cost();
+			int costIndex = (rightClick && cost instanceof OptionalCost) ? 1 : 0;
+			boolean canAfford = (cost instanceof OptionalCost opt)
+					? opt.has(player, costIndex)
+					: cost.has(player);
+			if (canAfford) {
+				if (cost instanceof OptionalCost opt) {
+					opt.apply(player, costIndex);
+				} else {
+					cost.apply(player);
+				}
 				product.apply(player);
 				Component msg = BetterShops.getInstance().getLang().getMessage("shop-purchased", player);
 				if (msg != null) player.sendMessage(msg);

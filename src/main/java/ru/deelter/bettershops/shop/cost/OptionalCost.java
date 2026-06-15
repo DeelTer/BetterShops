@@ -22,9 +22,22 @@ public class OptionalCost implements ICost {
         return costs.stream().anyMatch(c -> c.has(player));
     }
 
+    public boolean has(Player player, int index) {
+        if (index < costs.size()) return costs.get(index).has(player);
+        return has(player);
+    }
+
     @Override
     public void apply(Player player) {
         costs.stream().filter(c -> c.has(player)).findFirst().ifPresent(c -> c.apply(player));
+    }
+
+    public void apply(Player player, int index) {
+        if (index < costs.size() && costs.get(index).has(player)) {
+            costs.get(index).apply(player);
+        } else {
+            apply(player);
+        }
     }
 
     @Override
